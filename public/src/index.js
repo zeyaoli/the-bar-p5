@@ -5,6 +5,14 @@ let me;
 //give canvas a global variable
 let canvas;
 
+var NATIVE_WIDTH = 128;
+var NATIVE_HEIGHT = 100;
+
+var ASSET_SCALE = 2;
+
+var WIDTH = NATIVE_WIDTH * ASSET_SCALE;
+var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
+
 function setup() {
   canvas = createCanvas(400, 400);
   canvas.parent("canvas-container");
