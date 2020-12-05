@@ -26,15 +26,25 @@ var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
 let socket = io.connect();
 
 function setup() {
-  canvas = createCanvas(WIDTH, HEIGHT);
-  scaleCanvas();
-  canvas.parent("canvas-container");
-  // background(200);
-  //adapt it to the browser window
-  
-  const { name, x, y, destinationX, destinationY, message } = state.me;
-  me = new Player(name, x, y, name, destinationX, destinationY, message);
-  console.log(me);
+  // if(state.gameStart){
+    canvas = createCanvas(WIDTH, HEIGHT);
+    // scaleCanvas();
+    canvas.parent("canvas-container");
+    // background(200);
+    //adapt it to the browser window
+    
+    // const { id, name, x, y, destinationX, destinationY, message } = state.me;
+    // name = "";
+    // id = "";
+    // x = 200;
+    // y = 200;
+    // destinationX = 200;
+    // destinationY = 200;
+    // room = "frontDoor";
+
+    // me = new Player(id, name, x, y, destinationX, destinationY);
+    // console.log(state.me.x);
+  // }
 }
 
 function draw() {
@@ -47,34 +57,37 @@ function update(){
   background(0);
   fill(255);
   displayMe();
-  displayPlayers();
+  // displayPlayers();
+  // console.log(typeof state.me.x);
 }
 
 function windowResized() {
-  scaleCanvas();
+  // scaleCanvas();
 }
 
 const handleSubmit = (event) => {
   let text = document.getElementById("username-input");
   userName = text.value;
 
-  let me = state.me;
-  me.name = userName;
-  me.id = socket.id;
-  me.x = 200;
-  me.y = 200;
-  me.destinationX = me.x;
-  me.destinationY = me.y;
-  me.room = "frontDoor";
+  
+  let m = state.me;
+  m.name = userName;
+  m.id = socket.id;
+  m.x = 200;
+  m.y = 200;
+  m.destinationX = m.x;
+  m.destinationY = m.y;
+  m.room = "frontDoor";
   socket.emit("join", {
-    id: me.id,
-    name: me.name,
-    x: me.x,
-    y: me.y,
-    destinationX: me.destinationX,
-    destinationY: me.destinationY,
-    room: me.room,
+    id: m.id,
+    name: m.name,
+    x: m.x,
+    y: m.y,
+    destinationX: m.destinationX,
+    destinationY: m.destinationY,
+    room: m.room,
   });
+  me = new Player(m.id, m.name, m.x, m.y, m.destinationX, m.destinationY);
   state.gameStart = true;
 };
 
@@ -108,63 +121,63 @@ function displayMe(){
   me.move();
   me.display();
   me.displayName();
-  me.displayMessage();
+  // me.displayMessage();
 }
 
 function displayPlayers(){
   players.forEach((player) => {
-    player.move(p5);
-    player.display(p5);
-    player.displayName(p5);
-    player.displayOtherMessage(p5);
+    player.move();
+    player.display();
+    player.displayName();
+    // player.displayOtherMessage();
   });
 }
 
-function move() {
-  let prevX, prevY;
-  if (p.x != null && p.y != null) {
-    prevX = p.x;
-    prevY = p.y;
+// function move() {
+//   let prevX, prevY;
+//   if (p.x != null && p.y != null) {
+//     prevX = p.x;
+//     prevY = p.y;
 
-    //position and destination are different, move
-    if (p.x !== p.destinationX || p.y !== p.destinationY) {
-      //a series of vector operations to move toward a point at a linear speed
+//     //position and destination are different, move
+//     if (p.x !== p.destinationX || p.y !== p.destinationY) {
+//       //a series of vector operations to move toward a point at a linear speed
 
-      // create vectors for position and dest.
-      let destination = p5.createVector(p.destinationX, p.destinationY);
+//       // create vectors for position and dest.
+//       let destination = p5.createVector(p.destinationX, p.destinationY);
 
-      let position = p5.createVector(p.x, p.y);
+//       let position = p5.createVector(p.x, p.y);
 
-      // Calculate the distance between your destination and position
-      let distance = destination.dist(position);
+//       // Calculate the distance between your destination and position
+//       let distance = destination.dist(position);
 
-      // this is where you actually calculate the direction
-      // of your target towards your rect. subtraction dx-px, dy-py.
-      //   let delta = destination.sub(p.pos);
-      destination.sub(position);
+//       // this is where you actually calculate the direction
+//       // of your target towards your rect. subtraction dx-px, dy-py.
+//       //   let delta = destination.sub(p.pos);
+//       destination.sub(position);
 
-      // then you're going to normalize that value
-      // (normalize sets the length of the vector to 1)
-      destination.normalize();
+//       // then you're going to normalize that value
+//       // (normalize sets the length of the vector to 1)
+//       destination.normalize();
 
-      // then you can multiply that vector by the desired speed
-      let increment = destination.mult((p.speed * p5.deltaTime) / 10);
+//       // then you can multiply that vector by the desired speed
+//       let increment = destination.mult((p.speed * p5.deltaTime) / 10);
 
-      /*
-      IMPORTANT
-      deltaTime The system variable deltaTime contains the time difference between 
-      the beginning of the previous frame and the beginning of the current frame in milliseconds.
-      the speed is not based on the client framerate which can be variable but on the actual time that passes
-      between frames.
-      */
-      console.log(increment);
-      position.add(increment);
-      //   console.log(p.pos);
-      p.x = position.x;
-      p.y = position.y;
-    }
-  }
-}
+//       /*
+//       IMPORTANT
+//       deltaTime The system variable deltaTime contains the time difference between 
+//       the beginning of the previous frame and the beginning of the current frame in milliseconds.
+//       the speed is not based on the client framerate which can be variable but on the actual time that passes
+//       between frames.
+//       */
+//       console.log(increment);
+//       position.add(increment);
+//       //   console.log(p.pos);
+//       p.x = position.x;
+//       p.y = position.y;
+//     }
+//   }
+// }
 
 //================================= Socket.on =================================
 
@@ -179,7 +192,7 @@ socket.on("login", (data) => {
   data.players
     .filter((e) => e.id !== myId)
     .forEach((player) => {
-      getData().players.push(
+      state.players.push(
         new Player(
           player.id,
           player.x,
@@ -194,7 +207,7 @@ socket.on("login", (data) => {
 
 socket.on("join", (data) => {
   console.log(data);
-  getData().players.push(
+  state.players.push(
     new Player(
       data.id,
       data.x,
@@ -208,25 +221,25 @@ socket.on("join", (data) => {
 
 socket.on("playerMoved", (data) => {
   //find the player and update the destination value
-  const index = getData().players.findIndex((e) => e.id === data.id);
+  const index = state.players.findIndex((e) => e.id === data.id);
   if (index > -1) {
-    getData().players[index].destinationX = data.destinationX;
-    getData().players[index].destinationY = data.destinationY;
+    state.players[index].destinationX = data.destinationX;
+    state.players[index].destinationY = data.destinationY;
   }
 });
 
 socket.on("onMessage", (data) => {
   //receive message from players
-  const index = getData().players.findIndex((e) => e.id === data.id);
+  const index = state.players.findIndex((e) => e.id === data.id);
   if (index > -1) {
-    getData().players[index].message = data.message;
+    state.players[index].message = data.message;
   }
 });
 
 socket.on("quit", (id) => {
-  const index = getData().players.findIndex((e) => e.id === id);
+  const index = state.players.findIndex((e) => e.id === id);
 
   if (index > -1) {
-    getData().players.splice(index, 1);
+    state.players.splice(index, 1);
   }
 });

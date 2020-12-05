@@ -2,7 +2,7 @@
 
 class Player {
   //define player properties
-  constructor(id, x, y, name, destinationX, destinationY) {
+  constructor(id, name, x, y, destinationX, destinationY) {
     this.id = id;
     this.name = name;
     this.x = x;
@@ -62,8 +62,10 @@ class Player {
   }
 
   display() {
+    // console.log("display: "+this.id);
     rectMode(CENTER);
     rect(this.x, this.y, 30, 30);
+    // rect(10,10,30,30);
     fill(255);
   }
 
