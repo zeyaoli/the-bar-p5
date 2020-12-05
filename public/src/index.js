@@ -107,9 +107,9 @@ function GameStart() {
   pop();
 
   //draw other players
-  // DisplayPlayers();
+  DisplayPlayers();
   //draw me
-  // DisplayMe();
+  DisplayMe();
   // console.log(typeof state.me.x);
 }
 
