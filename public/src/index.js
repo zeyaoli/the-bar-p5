@@ -30,34 +30,35 @@ var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
 let socket = io.connect();
 
 function preload(){
-  gameBg = loadImage(ASSETS_FOLDER + state.entrance.bg);
-  // gameBg = loadImage("src/assets/likelike.png");
+  
+  var ss = loadSpriteSheet(ASSETS_FOLDER + state.entrance.bg, NATIVE_WIDTH, NATIVE_HEIGHT, 2);
+  bg = loadAnimation(ss);
 }
 
 function setup() {
-    canvas = createCanvas(WIDTH, HEIGHT);
-    canvas.parent("canvas-container");
+  canvas = createCanvas(WIDTH, HEIGHT);
+  canvas.parent("canvas-container");
 
-    //adapt it to the browser window 
-    ScaleCanvas();
+  //adapt it to the browser window 
+  ScaleCanvas();
 
-    noSmooth();
+  noSmooth();
 
-    var ss = loadSpriteSheet(gameBg, NATIVE_WIDTH, NATIVE_HEIGHT, 1);
-    bg = loadAnimation(ss);
+  // var ss = loadSpriteSheet(gameBg, NATIVE_WIDTH, NATIVE_HEIGHT, 2);
+  // bg = loadAnimation(ss);
 
-    if (state.entrance.frameDelay != null) {
-      bg.frameDelay = state.entrance.frameDelay;
+  if (state.entrance.frameDelay != null) {
+    bg.frameDelay = state.entrance.frameDelay;
   }
 
-  background(0);
-  imageMode(CORNER);
+  // background(0);
+  // imageMode(CORNER);
 
-  push();
-  scale(ASSET_SCALE);
-  translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
-  animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
-  pop();
+  // push();
+  // scale(ASSET_SCALE);
+  // translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
+  // animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
+  // pop();
     // background(200);
     //adapt it to the browser window
     
@@ -71,34 +72,32 @@ function setup() {
     // room = "frontDoor";
 
     // me = new Player(id, name, x, y, destinationX, destinationY);
-
-
 }
 
 function draw() {
-  if(state.gameStart){
+  // if(state.gameStart){
     GameStart();
-  }
+  // }
 }
 
 function GameStart(){
   // background(0);
   // fill(255);
 
-  // background(0);
-  // imageMode(CORNER);
+  background(0);
+  imageMode(CORNER);
 
-  // push();
-  // scale(ASSET_SCALE);
-  // translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
-  // animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
-  // pop();
+  push();
+  scale(ASSET_SCALE);
+  translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
+  animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
+  pop();
 
   
   //draw other players
-  DisplayPlayers();
+  // DisplayPlayers();
   //draw me
-  DisplayMe();
+  // DisplayMe();
   // console.log(typeof state.me.x);
 }
 
@@ -177,7 +176,7 @@ function DisplayPlayers(){
 }
 
 //initial other players that already in this map
-function initPlayers(people) {
+function InitPlayers(people) {
   // state.players = [];
 
   people
@@ -202,7 +201,7 @@ socket.on("connect", () => {
 // load all the existed player
 socket.on("login", (data) => {
   myId = data.myId;
-  initPlayers(data.players);
+  InitPlayers(data.players);
 });
 
 socket.on("join", (data) => {

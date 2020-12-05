@@ -14,7 +14,7 @@ var state = {
   },
   players: [],
   entrance:{
-    bg: "entrance.png",
+    bg: "entrance_ani.png",
     frames: 2,
     frameDelay: 30,
     avatarScale: 2,
