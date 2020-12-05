@@ -1,5 +1,6 @@
 //ref: https://github.com/MaxBittker/walky/blob/master/src/state.ts
-const data = {
+var state = {
+  gameStart : false,
   me: {
     name: "",
     id: "",
@@ -12,10 +13,13 @@ const data = {
     message: "",
   },
   players: [],
+  entrance:{
+    bg: "entrance.png"
+  }
 };
 
-const getData = () => {
-  return data;
-};
+// const getData = () => {
+//   return data;
+// };
 
-export { getData };
+// export { getData };

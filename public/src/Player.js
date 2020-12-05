@@ -1,4 +1,4 @@
-import { getData } from "./State";
+// import { getData } from "./State";
 
 class Player {
   //define player properties
@@ -12,12 +12,12 @@ class Player {
     this.speed = 50;
     this.message = [];
     this.onElement = false;
-    // this.color = p5.color(p5.random(255), p5.random(255), p5.random(255));
+    // this.color = color(random(255), random(255), random(255));
   }
 
   //movement reference: https://github.com/molleindustria/likelike-online/blob/master/public/client.js
   //line 1196
-  move(p5) {
+  move() {
     let prevX, prevY;
     if (this.x != null && this.y != null) {
       prevX = this.x;
@@ -28,8 +28,8 @@ class Player {
         //a series of vector operations to move toward a point at a linear speed
 
         // create vectors for position and dest.
-        let destination = p5.createVector(this.destinationX, this.destinationY);
-        let position = p5.createVector(this.x, this.y);
+        let destination = createVector(this.destinationX, this.destinationY);
+        let position = createVector(this.x, this.y);
 
         // Calculate the distance between your destination and position
         let distance = destination.dist(position);
@@ -43,7 +43,7 @@ class Player {
         delta.normalize();
 
         // then you can multiply that vector by the desired speed
-        let increment = delta.mult((this.speed * p5.deltaTime) / 1000);
+        let increment = delta.mult((this.speed * deltaTime) / 1000);
 
         /*
       IMPORTANT
@@ -55,21 +55,21 @@ class Player {
 
         position.add(increment);
         //update x and y value
-        this.x = p5.round(position.x);
-        this.y = p5.round(position.y);
+        this.x = round(position.x);
+        this.y = round(position.y);
       }
     }
   }
 
-  display(p5) {
-    p5.rectMode(p5.CENTER);
-    p5.rect(this.x, this.y, 30, 30);
-    p5.fill(255);
+  display() {
+    rectMode(CENTER);
+    rect(this.x, this.y, 30, 30);
+    fill(255);
   }
 
-  displayName(p5) {
-    let mouseVec = p5.createVector(p5.mouseX, p5.mouseY);
-    let pos = p5.createVector(this.x, this.y);
+  displayName() {
+    let mouseVec = createVector(mouseX, mouseY);
+    let pos = createVector(this.x, this.y);
     let distance = mouseVec.dist(pos);
     // console.log(distance);
     if (distance < 30) {
@@ -80,27 +80,27 @@ class Player {
     // console.log(this.onElement);
     if (this.onElement) {
       // console.log("over it");
-      p5.push();
-      p5.fill(255);
-      p5.rectMode(p5.CORNER);
-      p5.rect(0, p5.height - 50, p5.width, 50);
-      p5.fill(0);
-      p5.text(this.name, 30, p5.height - 30);
-      p5.textSize(32);
-      p5.pop();
+      push();
+      fill(255);
+      rectMode(CORNER);
+      rect(0, height - 50, width, 50);
+      fill(0);
+      text(this.name, 30, height - 30);
+      textSize(32);
+      pop();
     }
   }
 
-  displayMessage(p5) {
-    this.message = getData().me.message;
+  displayMessage() {
+    this.message = state.me.message;
     // console.log(this.message);
-    p5.text(this.message, this.x - 20, this.y - 50);
-    p5.textSize(32);
+    text(this.message, this.x - 20, this.y - 50);
+    textSize(32);
   }
-  displayOtherMessage(p5) {
-    p5.text(this.message, this.x - 20, this.y - 50);
-    p5.textSize(32);
+  displayOtherMessage() {
+    text(this.message, this.x - 20, this.y - 50);
+    textSize(32);
   }
 }
 
-export { Player };
+// export { Player };

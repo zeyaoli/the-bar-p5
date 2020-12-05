@@ -37,25 +37,23 @@
 
     <div id="interface">
       <!-- talk form is below canvas getTalkInput is what happens when return is pressed-->
-      <form
-        id="join-form"
-        action=""
-        onsubmit="return joinGame()"
-        style="display: none"
-      >
-        <!-- call the function below on button press-->
-        <button class="join-button" type="button" onclick="joinGame();">
+      <div id="join-form">
+        <input
+        type='text'
+        placeholder='Your Name'
+        id="username-input"
+      />
+        <button class="join-button" type="button" onclick="handleSubmit();">
           JOIN
         </button>
-      </form>
+      </div>
 
-      <form
+
+      <!-- <form
         id="user-form"
         action=""
         onsubmit="return nameOk()"
-        style="display: none"
       >
-        <!-- call the function below on button press-->
         <button class="user-button" type="button" onclick="nameOk();">
           CONTINUE
         </button>
@@ -65,7 +63,6 @@
         id="talk-form"
         action=""
         onsubmit="return getTalkInput()"
-        style="display: none"
       >
         <input
           class="talk-field"
@@ -74,12 +71,14 @@
           id="chatField"
           autocomplete="off"
         />
-        <!-- call the function below on button press-->
         <button class="talk-button" type="button" onclick="getTalkInput();">
           TALK
         </button>
-      </form>
+      </form> -->
     </div>
+
+    <script src="./src/State.js"></script>
+    <script src="./src/Player.js"></script>
     <script src="./src/index.js"></script>
   </body>
 </html>
