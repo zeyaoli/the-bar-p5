@@ -32,7 +32,6 @@ let myData = state.me;
 
 function preload() {
   gameBg = loadImage(ASSETS_FOLDER + state.entrance.bg);
-  // gameBg = loadImage("src/assets/likelike.png");
 }
 
 function setup() {
