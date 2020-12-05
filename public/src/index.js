@@ -1,6 +1,5 @@
 // var state = require('./State.js');
 
-
 //ref to other players
 let players = state.players;
 // ref to my player
@@ -15,7 +14,7 @@ let canvasScale;
 let canvas;
 
 var bg;
-var gameBg
+var gameBg;
 
 var ASSETS_FOLDER = "src/assets/";
 
@@ -29,23 +28,40 @@ var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
 
 let socket = io.connect();
 
+<<<<<<< HEAD
 function preload(){
   
   var ss = loadSpriteSheet(ASSETS_FOLDER + state.entrance.bg, NATIVE_WIDTH, NATIVE_HEIGHT, 2);
   bg = loadAnimation(ss);
+=======
+let myData = state.me;
+
+function preload() {
+  gameBg = loadImage(ASSETS_FOLDER + state.entrance.bg);
+  // gameBg = loadImage("src/assets/likelike.png");
+>>>>>>> main
 }
 
 function setup() {
   canvas = createCanvas(WIDTH, HEIGHT);
   canvas.parent("canvas-container");
 
+<<<<<<< HEAD
   //adapt it to the browser window 
+=======
+  //adapt it to the browser window
+>>>>>>> main
   ScaleCanvas();
 
   noSmooth();
 
+<<<<<<< HEAD
   // var ss = loadSpriteSheet(gameBg, NATIVE_WIDTH, NATIVE_HEIGHT, 2);
   // bg = loadAnimation(ss);
+=======
+  var ss = loadSpriteSheet(gameBg, NATIVE_WIDTH, NATIVE_HEIGHT, 1);
+  bg = loadAnimation(ss);
+>>>>>>> main
 
   if (state.entrance.frameDelay != null) {
     bg.frameDelay = state.entrance.frameDelay;
@@ -59,6 +75,7 @@ function setup() {
   // translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
   // animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
   // pop();
+<<<<<<< HEAD
     // background(200);
     //adapt it to the browser window
     
@@ -76,24 +93,60 @@ function setup() {
 
 function draw() {
   // if(state.gameStart){
+=======
+  // background(200);
+  //adapt it to the browser window
+
+  // const { id, name, x, y, destinationX, destinationY, message } = state.me;
+  // name = "";
+  // id = "";
+  // x = 200;
+  // y = 200;
+  // destinationX = 200;
+  // destinationY = 200;
+  // room = "frontDoor";
+
+  // me = new Player(id, name, x, y, destinationX, destinationY);
+}
+
+function draw() {
+  if (state.gameStart) {
+>>>>>>> main
     GameStart();
   // }
 }
 
-function GameStart(){
-  // background(0);
-  // fill(255);
+function mousePressed() {
+  if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+    me.destinationX = round(mouseX);
+    me.destinationY = round(mouseY);
+    console.log(me.destinationX);
+    socket.emit("move", {
+      destinationX: me.destinationX,
+      destinationY: me.destinationY,
+    });
+  }
+}
+
+<<<<<<< HEAD
+  background(0);
+  imageMode(CORNER);
+
+=======
+function GameStart() {
+  background(0);
+  fill(255);
 
   background(0);
   imageMode(CORNER);
 
+>>>>>>> main
   push();
   scale(ASSET_SCALE);
   translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
   animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
   pop();
 
-  
   //draw other players
   // DisplayPlayers();
   //draw me
@@ -109,12 +162,11 @@ const HandleSubmit = (event) => {
   let text = document.getElementById("username-input");
   userName = text.value;
 
-  
   let m = state.me;
   m.name = userName;
   m.id = socket.id;
-  m.x = WIDTH/2 + Math.floor(Math.random() * 25);
-  m.y = HEIGHT/2 + Math.floor(Math.random() * 25);
+  m.x = WIDTH / 2 + Math.floor(Math.random() * 25);
+  m.y = HEIGHT / 2 + Math.floor(Math.random() * 25);
   m.destinationX = m.x;
   m.destinationY = m.y;
   m.room = "frontDoor";
@@ -158,17 +210,17 @@ function ScaleCanvas() {
 }
 
 //draw me
-function DisplayMe(){
-  // me.move();
+function DisplayMe() {
+  me.move();
   me.display();
   me.displayName();
   // me.displayMessage();
 }
 
 //draw other players
-function DisplayPlayers(){
+function DisplayPlayers() {
   players.map((player) => {
-    // player.move();
+    player.move();
     player.display();
     player.displayName();
     // player.displayOtherMessage();
@@ -183,13 +235,19 @@ function InitPlayers(people) {
     .filter((e) => e.id != myId)
     .forEach((person) => {
       state.players.push(
-        new Player(person.id, person.name, person.x, person.y, person.destinationX, person.destinationY)
+        new Player(
+          person.id,
+          person.name,
+          person.x,
+          person.y,
+          person.destinationX,
+          person.destinationY
+        )
       );
     });
 
   // console.log(players);
 }
-
 
 //================================= Socket.on =================================
 

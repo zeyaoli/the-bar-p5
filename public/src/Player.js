@@ -65,7 +65,6 @@ class Player {
     // console.log("display: "+this.id);
     rectMode(CENTER);
     rect(this.x, this.y, 30, 30);
-    // rect(10,10,30,30);
     fill(255);
   }
 
@@ -104,5 +103,3 @@ class Player {
     textSize(32);
   }
 }
-
-// export { Player };
