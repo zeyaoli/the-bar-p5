@@ -14,7 +14,12 @@ var state = {
   },
   players: [],
   entrance:{
-    bg: "entrance.png"
+    bg: "entrance.png",
+    frames: 2,
+    frameDelay: 30,
+    avatarScale: 2,
+    tint: "#fdeac8",
+    
   }
 };
 

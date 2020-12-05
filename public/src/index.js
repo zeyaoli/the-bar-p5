@@ -14,7 +14,10 @@ let entranceBg;
 let canvasScale;
 let canvas;
 
-var ASSETS_FOLDER = "./assets/";
+var bg;
+var gameBg
+
+var ASSETS_FOLDER = "src/assets/";
 
 var NATIVE_WIDTH = 128;
 var NATIVE_HEIGHT = 100;
@@ -26,9 +29,35 @@ var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
 
 let socket = io.connect();
 
+function preload(){
+  gameBg = loadImage(ASSETS_FOLDER + state.entrance.bg);
+  // gameBg = loadImage("src/assets/likelike.png");
+}
+
 function setup() {
     canvas = createCanvas(WIDTH, HEIGHT);
     canvas.parent("canvas-container");
+
+    //adapt it to the browser window 
+    ScaleCanvas();
+
+    noSmooth();
+
+    var ss = loadSpriteSheet(gameBg, NATIVE_WIDTH, NATIVE_HEIGHT, 1);
+    bg = loadAnimation(ss);
+
+    if (state.entrance.frameDelay != null) {
+      bg.frameDelay = state.entrance.frameDelay;
+  }
+
+  background(0);
+  imageMode(CORNER);
+
+  push();
+  scale(ASSET_SCALE);
+  translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
+  animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
+  pop();
     // background(200);
     //adapt it to the browser window
     
@@ -42,6 +71,8 @@ function setup() {
     // room = "frontDoor";
 
     // me = new Player(id, name, x, y, destinationX, destinationY);
+
+
 }
 
 function draw() {
@@ -51,8 +82,18 @@ function draw() {
 }
 
 function GameStart(){
-  background(0);
-  fill(255);
+  // background(0);
+  // fill(255);
+
+  // background(0);
+  // imageMode(CORNER);
+
+  // push();
+  // scale(ASSET_SCALE);
+  // translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
+  // animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
+  // pop();
+
   
   //draw other players
   DisplayPlayers();
