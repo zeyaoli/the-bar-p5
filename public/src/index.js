@@ -28,40 +28,25 @@ var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
 
 let socket = io.connect();
 
-<<<<<<< HEAD
 function preload(){
   
   var ss = loadSpriteSheet(ASSETS_FOLDER + state.entrance.bg, NATIVE_WIDTH, NATIVE_HEIGHT, 2);
   bg = loadAnimation(ss);
-=======
-let myData = state.me;
 
-function preload() {
-  gameBg = loadImage(ASSETS_FOLDER + state.entrance.bg);
-  // gameBg = loadImage("src/assets/likelike.png");
->>>>>>> main
 }
 
 function setup() {
   canvas = createCanvas(WIDTH, HEIGHT);
   canvas.parent("canvas-container");
 
-<<<<<<< HEAD
   //adapt it to the browser window 
-=======
-  //adapt it to the browser window
->>>>>>> main
+
   ScaleCanvas();
 
   noSmooth();
 
-<<<<<<< HEAD
   // var ss = loadSpriteSheet(gameBg, NATIVE_WIDTH, NATIVE_HEIGHT, 2);
   // bg = loadAnimation(ss);
-=======
-  var ss = loadSpriteSheet(gameBg, NATIVE_WIDTH, NATIVE_HEIGHT, 1);
-  bg = loadAnimation(ss);
->>>>>>> main
 
   if (state.entrance.frameDelay != null) {
     bg.frameDelay = state.entrance.frameDelay;
@@ -75,25 +60,6 @@ function setup() {
   // translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
   // animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
   // pop();
-<<<<<<< HEAD
-    // background(200);
-    //adapt it to the browser window
-    
-    // const { id, name, x, y, destinationX, destinationY, message } = state.me;
-    // name = "";
-    // id = "";
-    // x = 200;
-    // y = 200;
-    // destinationX = 200;
-    // destinationY = 200;
-    // room = "frontDoor";
-
-    // me = new Player(id, name, x, y, destinationX, destinationY);
-}
-
-function draw() {
-  // if(state.gameStart){
-=======
   // background(200);
   //adapt it to the browser window
 
@@ -111,9 +77,8 @@ function draw() {
 
 function draw() {
   if (state.gameStart) {
->>>>>>> main
     GameStart();
-  // }
+  }
 }
 
 function mousePressed() {
@@ -128,11 +93,6 @@ function mousePressed() {
   }
 }
 
-<<<<<<< HEAD
-  background(0);
-  imageMode(CORNER);
-
-=======
 function GameStart() {
   background(0);
   fill(255);
@@ -140,7 +100,6 @@ function GameStart() {
   background(0);
   imageMode(CORNER);
 
->>>>>>> main
   push();
   scale(ASSET_SCALE);
   translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
