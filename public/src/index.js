@@ -76,22 +76,19 @@ function setup() {
 function draw() {
   GameStart();
 }
-
+// old code - click everywhere to move
 // function mousePressed() {
 //   if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
-//     if (me.destinationX !== undefined && me.destinationY !== undefined) {
-//       me.destinationX = round(mouseX);
-//       me.destinationY = round(mouseY);
-//       socket.emit("move", {
-//         destinationX: me.destinationX,
-//         destinationY: me.destinationY,
-//       });
-//     }
+//     me.destinationX = round(mouseX);
+//     me.destinationY = round(mouseY);
+//     socket.emit("move", {
+//       destinationX: me.destinationX,
+//       destinationY: me.destinationY,
+//     });
 //   }
 // }
 
 function GameStart() {
-
   background(0);
   imageMode(CORNER);
 
@@ -113,8 +110,7 @@ function GameStart() {
     //draw me
     DisplayMe();
   }
-  
-  
+
   // draw lines connect with bubble
   for (let i = 0; i < bubbles.length; i++) {
     let b = bubbles[i];
@@ -177,39 +173,37 @@ const HandleSubmit = (event) => {
   messageForm.style.display = "block";
 };
 
-
 //when I click to move
 function canvasReleased() {
   if (mouseButton == LEFT) {
-          
-          if (bar_areas != null) {
-            
-              //you know, at this point I'm not sure if you are using assets scaled by 2 for the areas
-              //so I'm just gonna stretch the coordinates ok
-              var mx = floor(map(mouseX, 0, WIDTH, 0, bar_areas.width));
-              var my = floor(map(mouseY, 0, HEIGHT, 0, bar_areas.height));
+    if (bar_areas != null) {
+      //you know, at this point I'm not sure if you are using assets scaled by 2 for the areas
+      //so I'm just gonna stretch the coordinates ok
+      var mx = floor(map(mouseX, 0, WIDTH, 0, bar_areas.width));
+      var my = floor(map(mouseY, 0, HEIGHT, 0, bar_areas.height));
 
-              var c = bar_areas.get(mx, my);
+      var c = bar_areas.get(mx, my);
 
-              console.log("color: "+c);
-              //if transparent or semitransparent do nothing
-              if (alpha(c) != 255) {
-                  //cancel command
-                  // nextCommand = null;
-                  //stop if moving
-                  if (me.x != me.destinationX && me.y != me.destinationY)
-                      socket.emit("move", { destinationX: me.x, destinationY: me.y });
-              }
-              else if (c[0] == 255 && c[1] == 255 && c[2] == 255) {
-                  //if white, generic walk stop command
-                  // nextCommand = null;
-                  me.destinationX = round(mouseX);
-                  me.destinationY = round(mouseY);
-                  socket.emit("move", { destinationX: me.destinationX, destinationY: me.destinationY });
-              }
-          }
+      console.log("color: " + c);
+      //if transparent or semitransparent do nothing
+      if (alpha(c) != 255) {
+        //cancel command
+        // nextCommand = null;
+        //stop if moving
+        if (me.x != me.destinationX && me.y != me.destinationY)
+          socket.emit("move", { destinationX: me.x, destinationY: me.y });
+      } else if (c[0] == 255 && c[1] == 255 && c[2] == 255) {
+        //if white, generic walk stop command
+        // nextCommand = null;
+        me.destinationX = round(mouseX);
+        me.destinationY = round(mouseY);
+        socket.emit("move", {
+          destinationX: me.destinationX,
+          destinationY: me.destinationY,
+        });
+      }
+    }
   }
-
 }
 
 // send message from message form
