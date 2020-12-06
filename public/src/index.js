@@ -39,13 +39,8 @@ var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
 let socket = io.connect();
 
 function preload() {
-<<<<<<< HEAD
   var avatar_ss = loadSpriteSheet(ASSETS_FOLDER + "avatar_ss.png", 17, 17, 4);
-  var ss = loadSpriteSheet(
-=======
-  var avatar_ss = loadSpriteSheet(ASSETS_FOLDER + "avatar_ss.png", 17,17,4);
   var entrance_ss = loadSpriteSheet(
->>>>>>> feb292414fe7c8426a00427617434dd3fe3b5c0c
     ASSETS_FOLDER + state.entrance.bg,
     NATIVE_WIDTH,
     NATIVE_HEIGHT,
@@ -80,18 +75,20 @@ function setup() {
 
 function draw() {
   // if (state.gameStart) {
-    GameStart();
+  GameStart();
   // }
 }
 
 function mousePressed() {
   if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
-    me.destinationX = round(mouseX);
-    me.destinationY = round(mouseY);
-    socket.emit("move", {
-      destinationX: me.destinationX,
-      destinationY: me.destinationY,
-    });
+    if (me.destinationX !== undefined && me.destinationY !== undefined) {
+      me.destinationX = round(mouseX);
+      me.destinationY = round(mouseY);
+      socket.emit("move", {
+        destinationX: me.destinationX,
+        destinationY: me.destinationY,
+      });
+    }
   }
 }
 
@@ -106,19 +103,25 @@ function GameStart() {
   scale(ASSET_SCALE);
   translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
 
-  if(state.me.room == "bar"){
+  if (state.me.room == "bar") {
     animation(bar_bg, floor(WIDTH / 2), floor(HEIGHT / 2));
-  }else {
+  } else {
     animation(entrance_bg, floor(WIDTH / 2), floor(HEIGHT / 2));
   }
 
   pop();
 
-<<<<<<< HEAD
-  //draw other players
-  DisplayPlayers();
-  //draw me
-  DisplayMe();
+  if (state.gameStart) {
+    //draw other players
+    DisplayPlayers();
+    //draw me
+    DisplayMe();
+  }
+
+  // //draw other players
+  // DisplayPlayers();
+  // //draw me
+  // DisplayMe();
   // draw lines connect with bubble
   for (let i = 0; i < bubbles.length; i++) {
     let b = bubbles[i];
@@ -161,15 +164,6 @@ function GameStart() {
       i--; //decrement
     }
   }
-=======
-  if(state.gameStart){
-    //draw other players
-    DisplayPlayers();
-    //draw me
-    DisplayMe();
-  }
-  
->>>>>>> feb292414fe7c8426a00427617434dd3fe3b5c0c
 }
 
 function WindowResized() {

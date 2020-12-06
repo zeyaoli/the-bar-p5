@@ -19,22 +19,17 @@ var state = {
     frames: 2,
     frameDelay: 30,
     avatarScale: 2,
-<<<<<<< HEAD
     tint: "#fdeac8",
   },
-  bubbles: [],
-=======
-    // tint: "#fdeac8",
-  },
-  bar:{
+  bar: {
     bg: "bar.png",
     frames: 2,
     frameDelay: 30,
     avatarScale: 2,
     // tint: "#fdeac8",
-    area: "bar_area.png"
-  }
->>>>>>> feb292414fe7c8426a00427617434dd3fe3b5c0c
+    area: "bar_area.png",
+  },
+  bubbles: [],
 };
 
 // const getData = () => {
