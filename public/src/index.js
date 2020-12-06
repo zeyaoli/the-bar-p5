@@ -16,6 +16,9 @@ var bar_bg;
 var gameBg;
 var avatar;
 var bar_areas;
+var avatars_c = ["pink", "blue", "green", "white", "yellow"];
+var avatars_ss = [];
+var avatars = [];
 
 let BUBBLE_TIME = 8;
 let BUBBLE_MARGIN = 3;
@@ -38,7 +41,14 @@ var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
 let socket = io.connect();
 
 function preload() {
-  var avatar_ss = loadSpriteSheet(ASSETS_FOLDER + "avatar_ss.png", 17, 17, 4);
+
+  //preload avatar sprite
+  for(var i = 0; i< avatars_c.length; i++){
+    avatars_ss.push(loadSpriteSheet(ASSETS_FOLDER + `avatar_${avatars_c[i]}.png`, 17, 17, 4));
+    avatars.push(loadAnimation(avatars_ss[i]));
+    avatars[i].frameDelay = 15;
+  }
+
   var entrance_ss = loadSpriteSheet(
     ASSETS_FOLDER + state.entrance.bg,
     NATIVE_WIDTH,
@@ -53,8 +63,8 @@ function preload() {
   );
   entrance_bg = loadAnimation(entrance_ss);
   bar_bg = loadAnimation(bar_ss);
-  avatar = loadAnimation(avatar_ss);
-
+  
+  
   bar_areas = loadImage(ASSETS_FOLDER + state.bar.area);
 }
 
@@ -69,8 +79,9 @@ function setup() {
 
   if (state.entrance.frameDelay != null) {
     entrance_bg.frameDelay = state.entrance.frameDelay;
-    avatar.frameDelay = 15;
   }
+
+  
 }
 
 function draw() {
@@ -156,6 +167,7 @@ const HandleSubmit = (event) => {
   let m = state.me;
   m.name = userName;
   m.id = socket.id;
+  m.avatar = Math.floor(Math.random() * 5);
   m.x = WIDTH / 2 + Math.floor(Math.random() * 25);
   m.y = HEIGHT / 2 + Math.floor(Math.random() * 25);
   m.destinationX = m.x;
@@ -164,13 +176,14 @@ const HandleSubmit = (event) => {
   socket.emit("join", {
     id: m.id,
     name: m.name,
+    avatar: m.avatar,
     x: m.x,
     y: m.y,
     room: m.room,
     destinationX: m.destinationX,
     destinationY: m.destinationY,
   });
-  me = new Player(m.id, m.name, m.x, m.y, m.destinationX, m.destinationY);
+  me = new Player(m.id, m.name, m.avatar, m.x, m.y, m.destinationX, m.destinationY);
   state.gameStart = true;
   // hide join and show message
   joinForm.style.display = "none";
@@ -279,6 +292,7 @@ function InitPlayers(people) {
         new Player(
           person.id,
           person.name,
+          person.avatar,
           person.x,
           person.y,
           person.destinationX,
@@ -307,6 +321,7 @@ socket.on("join", (data) => {
     new Player(
       data.id,
       data.name,
+      data.avatar,
       data.x,
       data.y,
       data.destinationX,

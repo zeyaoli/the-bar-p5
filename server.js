@@ -26,10 +26,11 @@ io.on("connection", (socket) => {
   console.log("New client connected");
 
   socket.on("join", (data) => {
-    const { id, name, x, y, room, destinationX, destinationY } = data;
+    const { id, name, avatar, x, y, room, destinationX, destinationY } = data;
     const player = {
       id: id,
       name: name,
+      avatar: avatar,
       x: x,
       y: y,
       room: room,

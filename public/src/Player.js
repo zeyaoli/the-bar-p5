@@ -2,9 +2,10 @@
 
 class Player {
   //define player properties
-  constructor(id, name, x, y, destinationX, destinationY) {
+  constructor(id, name, avatar, x, y, destinationX, destinationY) {
     this.id = id;
     this.name = name;
+    this.avatar = avatar;
     this.x = x;
     this.y = y;
     this.destinationX = destinationX;
@@ -14,6 +15,8 @@ class Player {
     this.onElement = false;
     // this.color = color(random(255), random(255), random(255));
   }
+
+ 
 
   //movement reference: https://github.com/molleindustria/likelike-online/blob/master/public/client.js
   //line 1196
@@ -62,11 +65,7 @@ class Player {
   }
 
   display() {
-    // console.log("display: "+this.id);
-    // rectMode(CENTER);
-    // rect(this.x, this.y, 30, 30);
-    // fill(255);
-    animation(avatar, this.x, this.y);
+    animation(avatars[this.avatar], this.x, this.y);
   }
 
   displayName() {

@@ -4,7 +4,7 @@ var state = {
   me: {
     name: "",
     id: "",
-    // avatar: null,
+    avatar: null,
     room: "entrance",
     room: null,
     x: null,
