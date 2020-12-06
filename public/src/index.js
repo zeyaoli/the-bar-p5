@@ -28,51 +28,29 @@ var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
 
 let socket = io.connect();
 
-function preload(){
-  
-  var ss = loadSpriteSheet(ASSETS_FOLDER + state.entrance.bg, NATIVE_WIDTH, NATIVE_HEIGHT, 2);
+function preload() {
+  var ss = loadSpriteSheet(
+    ASSETS_FOLDER + state.entrance.bg,
+    NATIVE_WIDTH,
+    NATIVE_HEIGHT,
+    2
+  );
   bg = loadAnimation(ss);
-
 }
 
 function setup() {
   canvas = createCanvas(WIDTH, HEIGHT);
   canvas.parent("canvas-container");
 
-  //adapt it to the browser window 
+  //adapt it to the browser window
 
   ScaleCanvas();
 
   noSmooth();
 
-  // var ss = loadSpriteSheet(gameBg, NATIVE_WIDTH, NATIVE_HEIGHT, 2);
-  // bg = loadAnimation(ss);
-
   if (state.entrance.frameDelay != null) {
     bg.frameDelay = state.entrance.frameDelay;
   }
-
-  // background(0);
-  // imageMode(CORNER);
-
-  // push();
-  // scale(ASSET_SCALE);
-  // translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
-  // animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
-  // pop();
-  // background(200);
-  //adapt it to the browser window
-
-  // const { id, name, x, y, destinationX, destinationY, message } = state.me;
-  // name = "";
-  // id = "";
-  // x = 200;
-  // y = 200;
-  // destinationX = 200;
-  // destinationY = 200;
-  // room = "frontDoor";
-
-  // me = new Player(id, name, x, y, destinationX, destinationY);
 }
 
 function draw() {
@@ -110,7 +88,6 @@ function GameStart() {
   DisplayPlayers();
   //draw me
   DisplayMe();
-  // console.log(typeof state.me.x);
 }
 
 function WindowResized() {
@@ -118,6 +95,8 @@ function WindowResized() {
 }
 
 const HandleSubmit = (event) => {
+  let joinForm = document.getElementById("join-form");
+  let messageForm = document.getElementById("message-form");
   let text = document.getElementById("username-input");
   userName = text.value;
 
@@ -140,6 +119,16 @@ const HandleSubmit = (event) => {
   });
   me = new Player(m.id, m.name, m.x, m.y, m.destinationX, m.destinationY);
   state.gameStart = true;
+  // hide join and show message
+  joinForm.style.display = "none";
+  messageForm.style.display = "block";
+};
+
+// send message from message form
+const sendMessage = (event) => {
+  const messageInput = document.getElementById("message-input");
+  state.me.message = messageInput.value;
+  socket.emit("sendMessage", { message: me.message });
 };
 
 function ScaleCanvas() {
@@ -173,7 +162,7 @@ function DisplayMe() {
   me.move();
   me.display();
   me.displayName();
-  // me.displayMessage();
+  me.displayMessage();
 }
 
 //draw other players
@@ -182,7 +171,7 @@ function DisplayPlayers() {
     player.move();
     player.display();
     player.displayName();
-    // player.displayOtherMessage();
+    player.displayOtherMessage();
   });
 }
 
@@ -204,8 +193,6 @@ function InitPlayers(people) {
         )
       );
     });
-
-  // console.log(players);
 }
 
 //================================= Socket.on =================================
