@@ -28,18 +28,21 @@ var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
 
 let socket = io.connect();
 
-function preload(){
-  
-  var ss = loadSpriteSheet(ASSETS_FOLDER + state.entrance.bg, NATIVE_WIDTH, NATIVE_HEIGHT, 2);
+function preload() {
+  var ss = loadSpriteSheet(
+    ASSETS_FOLDER + state.entrance.bg,
+    NATIVE_WIDTH,
+    NATIVE_HEIGHT,
+    2
+  );
   bg = loadAnimation(ss);
-
 }
 
 function setup() {
   canvas = createCanvas(WIDTH, HEIGHT);
   canvas.parent("canvas-container");
 
-  //adapt it to the browser window 
+  //adapt it to the browser window
 
   ScaleCanvas();
 
@@ -118,6 +121,8 @@ function WindowResized() {
 }
 
 const HandleSubmit = (event) => {
+  let joinForm = document.getElementById("join-form");
+  let messageForm = document.getElementById("message-form");
   let text = document.getElementById("username-input");
   userName = text.value;
 
@@ -140,6 +145,14 @@ const HandleSubmit = (event) => {
   });
   me = new Player(m.id, m.name, m.x, m.y, m.destinationX, m.destinationY);
   state.gameStart = true;
+  joinForm.style.display = "none";
+  messageForm.style.display = "block";
+};
+
+const sendMessage = (event) => {
+  const messageInput = document.getElementById("message-input");
+  state.me.message = messageInput.value;
+  socket.emit("sendMessage", { message: me.message });
 };
 
 function ScaleCanvas() {
@@ -173,7 +186,7 @@ function DisplayMe() {
   me.move();
   me.display();
   me.displayName();
-  // me.displayMessage();
+  me.displayMessage();
 }
 
 //draw other players
@@ -182,7 +195,7 @@ function DisplayPlayers() {
     player.move();
     player.display();
     player.displayName();
-    // player.displayOtherMessage();
+    player.displayOtherMessage();
   });
 }
 

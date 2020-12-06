@@ -94,12 +94,12 @@ class Player {
 
   displayMessage() {
     this.message = state.me.message;
-    // console.log(this.message);
-    text(this.message, this.x - 20, this.y - 50);
+    console.log(this.message);
+    text(this.message, this.x - 15, this.y - 15);
     textSize(32);
   }
   displayOtherMessage() {
-    text(this.message, this.x - 20, this.y - 50);
+    text(this.message, this.x - 15, this.y - 15);
     textSize(32);
   }
 }
