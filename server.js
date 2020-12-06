@@ -60,14 +60,19 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", (data) => {
-    const { message } = data;
+    const { id, message, x, y } = data;
     const index = players.findIndex((e) => e.id === socket.id);
     if (index > -1) {
       players[index].message = message;
+      players[index].x = x;
+      players[index].y = y;
     }
+    console.log(message);
     socket.broadcast.emit("onMessage", {
       id: socket.id,
       message: message,
+      x: x,
+      y: y,
     });
   });
 
