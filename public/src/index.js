@@ -48,34 +48,9 @@ function setup() {
 
   noSmooth();
 
-  // var ss = loadSpriteSheet(gameBg, NATIVE_WIDTH, NATIVE_HEIGHT, 2);
-  // bg = loadAnimation(ss);
-
   if (state.entrance.frameDelay != null) {
     bg.frameDelay = state.entrance.frameDelay;
   }
-
-  // background(0);
-  // imageMode(CORNER);
-
-  // push();
-  // scale(ASSET_SCALE);
-  // translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
-  // animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
-  // pop();
-  // background(200);
-  //adapt it to the browser window
-
-  // const { id, name, x, y, destinationX, destinationY, message } = state.me;
-  // name = "";
-  // id = "";
-  // x = 200;
-  // y = 200;
-  // destinationX = 200;
-  // destinationY = 200;
-  // room = "frontDoor";
-
-  // me = new Player(id, name, x, y, destinationX, destinationY);
 }
 
 function draw() {
@@ -113,7 +88,6 @@ function GameStart() {
   DisplayPlayers();
   //draw me
   DisplayMe();
-  // console.log(typeof state.me.x);
 }
 
 function WindowResized() {
@@ -145,10 +119,12 @@ const HandleSubmit = (event) => {
   });
   me = new Player(m.id, m.name, m.x, m.y, m.destinationX, m.destinationY);
   state.gameStart = true;
+  // hide join and show message
   joinForm.style.display = "none";
   messageForm.style.display = "block";
 };
 
+// send message from message form
 const sendMessage = (event) => {
   const messageInput = document.getElementById("message-input");
   state.me.message = messageInput.value;
@@ -217,8 +193,6 @@ function InitPlayers(people) {
         )
       );
     });
-
-  // console.log(players);
 }
 
 //================================= Socket.on =================================
