@@ -47,4 +47,16 @@ canvas {
 
 #message-form {
   display: none;
+  font-size: 16px;
+}
+
+#message-input {
+  font-size: 16px;
+}
+#username-input {
+  font-size: 16px;
+}
+
+#join-form {
+  font-size: 16px;
 }
