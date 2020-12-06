@@ -19,7 +19,7 @@ class Bubble {
       this.offY - floor((TEXT_H + TEXT_PADDING * 2 + BUBBLE_MARGIN) * this.row);
     noStroke();
     textAlign(LEFT, BASELINE);
-
+    textSize(10);
     fill(30);
     rectMode(CORNER);
     rect(this.x, this.y, this.w + 1, this.h);

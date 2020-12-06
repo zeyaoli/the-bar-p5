@@ -25,14 +25,6 @@ var TEXT_H = 8;
 var TEXT_PADDING = 3;
 var TEXT_LEADING = TEXT_H + 4;
 
-let BUBBLE_TIME = 8;
-let BUBBLE_MARGIN = 3;
-let bubbles = state.bubbles;
-
-var TEXT_H = 8;
-var TEXT_PADDING = 3;
-var TEXT_LEADING = TEXT_H + 4;
-
 var ASSETS_FOLDER = "src/assets/";
 
 var NATIVE_WIDTH = 128;
@@ -84,17 +76,17 @@ function setup() {
 function draw() {
   GameStart();
 }
-
-function mousePressed() {
-  if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
-    me.destinationX = round(mouseX);
-    me.destinationY = round(mouseY);
-    socket.emit("move", {
-      destinationX: me.destinationX,
-      destinationY: me.destinationY,
-    });
-  }
-}
+// old code - click everywhere to move
+// function mousePressed() {
+//   if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+//     me.destinationX = round(mouseX);
+//     me.destinationY = round(mouseY);
+//     socket.emit("move", {
+//       destinationX: me.destinationX,
+//       destinationY: me.destinationY,
+//     });
+//   }
+// }
 
 function GameStart() {
   background(0);
