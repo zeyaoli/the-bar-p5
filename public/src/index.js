@@ -13,7 +13,8 @@ let entranceBg;
 let canvasScale;
 let canvas;
 
-var bg;
+var entrance_bg;
+var bar_bg;
 var gameBg;
 var avatar;
 
@@ -31,13 +32,20 @@ let socket = io.connect();
 
 function preload() {
   var avatar_ss = loadSpriteSheet(ASSETS_FOLDER + "avatar_ss.png", 17,17,4);
-  var ss = loadSpriteSheet(
+  var entrance_ss = loadSpriteSheet(
     ASSETS_FOLDER + state.entrance.bg,
     NATIVE_WIDTH,
     NATIVE_HEIGHT,
     2
   );
-  bg = loadAnimation(ss);
+  var bar_ss = loadSpriteSheet(
+    ASSETS_FOLDER + state.bar.bg,
+    NATIVE_WIDTH,
+    NATIVE_HEIGHT,
+    2
+  );
+  entrance_bg = loadAnimation(entrance_ss);
+  bar_bg = loadAnimation(bar_ss);
   avatar = loadAnimation(avatar_ss);
 }
 
@@ -52,15 +60,15 @@ function setup() {
   noSmooth();
 
   if (state.entrance.frameDelay != null) {
-    bg.frameDelay = state.entrance.frameDelay;
+    entrance_bg.frameDelay = state.entrance.frameDelay;
     avatar.frameDelay = 15;
   }
 }
 
 function draw() {
-  if (state.gameStart) {
+  // if (state.gameStart) {
     GameStart();
-  }
+  // }
 }
 
 function mousePressed() {
@@ -76,8 +84,8 @@ function mousePressed() {
 }
 
 function GameStart() {
-  background(0);
-  fill(255);
+  // background(0);
+  // fill(255);
 
   background(0);
   imageMode(CORNER);
@@ -85,13 +93,22 @@ function GameStart() {
   push();
   scale(ASSET_SCALE);
   translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
-  animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
+
+  if(state.me.room == "bar"){
+    animation(bar_bg, floor(WIDTH / 2), floor(HEIGHT / 2));
+  }else {
+    animation(entrance_bg, floor(WIDTH / 2), floor(HEIGHT / 2));
+  }
+
   pop();
 
-  //draw other players
-  DisplayPlayers();
-  //draw me
-  DisplayMe();
+  if(state.gameStart){
+    //draw other players
+    DisplayPlayers();
+    //draw me
+    DisplayMe();
+  }
+  
 }
 
 function WindowResized() {
@@ -111,15 +128,15 @@ const HandleSubmit = (event) => {
   m.y = HEIGHT / 2 + Math.floor(Math.random() * 25);
   m.destinationX = m.x;
   m.destinationY = m.y;
-  m.room = "frontDoor";
+  m.room = "bar";
   socket.emit("join", {
     id: m.id,
     name: m.name,
     x: m.x,
     y: m.y,
+    room: m.room,
     destinationX: m.destinationX,
     destinationY: m.destinationY,
-    room: m.room,
   });
   me = new Player(m.id, m.name, m.x, m.y, m.destinationX, m.destinationY);
   state.gameStart = true;
