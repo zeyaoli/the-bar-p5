@@ -1,5 +1,3 @@
-// var state = require('./State.js');
-
 //ref to other players
 let players = state.players;
 // ref to my player
@@ -13,9 +11,19 @@ let entranceBg;
 let canvasScale;
 let canvas;
 
-var bg;
+var entrance_bg;
+var bar_bg;
 var gameBg;
 var avatar;
+var bar_areas;
+
+let BUBBLE_TIME = 8;
+let BUBBLE_MARGIN = 3;
+let bubbles = state.bubbles;
+
+var TEXT_H = 8;
+var TEXT_PADDING = 3;
+var TEXT_LEADING = TEXT_H + 4;
 
 let BUBBLE_TIME = 8;
 let BUBBLE_MARGIN = 3;
@@ -39,36 +47,42 @@ let socket = io.connect();
 
 function preload() {
   var avatar_ss = loadSpriteSheet(ASSETS_FOLDER + "avatar_ss.png", 17, 17, 4);
-  var ss = loadSpriteSheet(
+  var entrance_ss = loadSpriteSheet(
     ASSETS_FOLDER + state.entrance.bg,
     NATIVE_WIDTH,
     NATIVE_HEIGHT,
     2
   );
-  bg = loadAnimation(ss);
+  var bar_ss = loadSpriteSheet(
+    ASSETS_FOLDER + state.bar.bg,
+    NATIVE_WIDTH,
+    NATIVE_HEIGHT,
+    2
+  );
+  entrance_bg = loadAnimation(entrance_ss);
+  bar_bg = loadAnimation(bar_ss);
   avatar = loadAnimation(avatar_ss);
+
+  bar_areas = loadImage(ASSETS_FOLDER + state.bar.area);
 }
 
 function setup() {
   canvas = createCanvas(WIDTH, HEIGHT);
   canvas.parent("canvas-container");
 
+  canvas.mouseReleased(canvasReleased);
   //adapt it to the browser window
-
   ScaleCanvas();
-
   noSmooth();
 
   if (state.entrance.frameDelay != null) {
-    bg.frameDelay = state.entrance.frameDelay;
+    entrance_bg.frameDelay = state.entrance.frameDelay;
     avatar.frameDelay = 15;
   }
 }
 
 function draw() {
-  if (state.gameStart) {
-    GameStart();
-  }
+  GameStart();
 }
 
 function mousePressed() {
@@ -84,21 +98,27 @@ function mousePressed() {
 
 function GameStart() {
   background(0);
-  fill(255);
-
-  background(0);
   imageMode(CORNER);
 
   push();
   scale(ASSET_SCALE);
   translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
-  animation(bg, floor(WIDTH / 2), floor(HEIGHT / 2));
+
+  if (state.me.room == "bar") {
+    animation(bar_bg, floor(WIDTH / 2), floor(HEIGHT / 2));
+  } else {
+    animation(entrance_bg, floor(WIDTH / 2), floor(HEIGHT / 2));
+  }
+
   pop();
 
-  //draw other players
-  DisplayPlayers();
-  //draw me
-  DisplayMe();
+  if (state.gameStart) {
+    //draw other players
+    DisplayPlayers();
+    //draw me
+    DisplayMe();
+  }
+
   // draw lines connect with bubble
   for (let i = 0; i < bubbles.length; i++) {
     let b = bubbles[i];
@@ -113,22 +133,6 @@ function GameStart() {
         b.orphan = true;
       }
     }
-    // if (player !== null && !b.orphan) {
-    // if (round(player.x) == b.x && round(player.y) == b.y) {
-    //   strokeWeight(2);
-    //   stroke(30);
-    //   strokeCap(SQUARE);
-    //   line(
-    //     floor(player.x),
-    //     floor(player.y - BUBBLE_MARGIN),
-    //     floor(player.x),
-    //     floor(b.y)
-    //   );
-    // }
-    // } else {
-    //   //once if move break the line;
-    //   b.orphan = true;
-    // }
   }
 
   for (var i = 0; i < bubbles.length; i++) {
@@ -160,15 +164,15 @@ const HandleSubmit = (event) => {
   m.y = HEIGHT / 2 + Math.floor(Math.random() * 25);
   m.destinationX = m.x;
   m.destinationY = m.y;
-  m.room = "frontDoor";
+  m.room = "bar";
   socket.emit("join", {
     id: m.id,
     name: m.name,
     x: m.x,
     y: m.y,
+    room: m.room,
     destinationX: m.destinationX,
     destinationY: m.destinationY,
-    room: m.room,
   });
   me = new Player(m.id, m.name, m.x, m.y, m.destinationX, m.destinationY);
   state.gameStart = true;
@@ -176,6 +180,39 @@ const HandleSubmit = (event) => {
   joinForm.style.display = "none";
   messageForm.style.display = "block";
 };
+
+//when I click to move
+function canvasReleased() {
+  if (mouseButton == LEFT) {
+    if (bar_areas != null) {
+      //you know, at this point I'm not sure if you are using assets scaled by 2 for the areas
+      //so I'm just gonna stretch the coordinates ok
+      var mx = floor(map(mouseX, 0, WIDTH, 0, bar_areas.width));
+      var my = floor(map(mouseY, 0, HEIGHT, 0, bar_areas.height));
+
+      var c = bar_areas.get(mx, my);
+
+      console.log("color: " + c);
+      //if transparent or semitransparent do nothing
+      if (alpha(c) != 255) {
+        //cancel command
+        // nextCommand = null;
+        //stop if moving
+        if (me.x != me.destinationX && me.y != me.destinationY)
+          socket.emit("move", { destinationX: me.x, destinationY: me.y });
+      } else if (c[0] == 255 && c[1] == 255 && c[2] == 255) {
+        //if white, generic walk stop command
+        // nextCommand = null;
+        me.destinationX = round(mouseX);
+        me.destinationY = round(mouseY);
+        socket.emit("move", {
+          destinationX: me.destinationX,
+          destinationY: me.destinationY,
+        });
+      }
+    }
+  }
+}
 
 // send message from message form
 const sendMessage = (event) => {

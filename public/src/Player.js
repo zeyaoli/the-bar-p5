@@ -74,7 +74,7 @@ class Player {
     let pos = createVector(this.x, this.y);
     let distance = mouseVec.dist(pos);
     // console.log(distance);
-    if (distance < 30) {
+    if (distance < 15) {
       this.onElement = true;
     } else {
       this.onElement = false;
@@ -95,7 +95,6 @@ class Player {
 
   displayMessage() {
     this.message = state.me.message;
-    console.log(this.message);
     text(this.message, this.x - 15, this.y - 15);
     textSize(32);
   }
