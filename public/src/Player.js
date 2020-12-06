@@ -85,9 +85,9 @@ class Player {
       push();
       fill(255);
       rectMode(CORNER);
-      rect(0, height - 50, width, 50);
+      rect(0, height - 15, width, 15);
       fill(0);
-      text(this.name, 30, height - 30);
+      text(this.name, 10, height - 5);
       textSize(32);
       pop();
     }
