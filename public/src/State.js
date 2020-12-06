@@ -1,6 +1,6 @@
 //ref: https://github.com/MaxBittker/walky/blob/master/src/state.ts
 var state = {
-  gameStart : false,
+  gameStart: false,
   me: {
     name: "",
     id: "",
@@ -14,21 +14,22 @@ var state = {
     message: "",
   },
   players: [],
-  entrance:{
+  entrance: {
     bg: "entrance_ani.png",
     frames: 2,
     frameDelay: 30,
     avatarScale: 2,
-    // tint: "#fdeac8",
+    tint: "#fdeac8",
   },
-  bar:{
+  bar: {
     bg: "bar.png",
     frames: 2,
     frameDelay: 30,
     avatarScale: 2,
     // tint: "#fdeac8",
-    area: "bar_area.png"
-  }
+    area: "bar_area.png",
+  },
+  bubbles: [],
 };
 
 // const getData = () => {

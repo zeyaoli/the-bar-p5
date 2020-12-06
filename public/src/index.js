@@ -19,6 +19,14 @@ var gameBg;
 var avatar;
 var bar_areas;
 
+let BUBBLE_TIME = 8;
+let BUBBLE_MARGIN = 3;
+let bubbles = state.bubbles;
+
+var TEXT_H = 8;
+var TEXT_PADDING = 3;
+var TEXT_LEADING = TEXT_H + 4;
+
 var ASSETS_FOLDER = "src/assets/";
 
 var NATIVE_WIDTH = 128;
@@ -32,7 +40,7 @@ var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
 let socket = io.connect();
 
 function preload() {
-  var avatar_ss = loadSpriteSheet(ASSETS_FOLDER + "avatar_ss.png", 17,17,4);
+  var avatar_ss = loadSpriteSheet(ASSETS_FOLDER + "avatar_ss.png", 17, 17, 4);
   var entrance_ss = loadSpriteSheet(
     ASSETS_FOLDER + state.entrance.bg,
     NATIVE_WIDTH,
@@ -70,19 +78,20 @@ function setup() {
 
 function draw() {
   // if (state.gameStart) {
-    GameStart();
+  GameStart();
   // }
 }
 
 function mousePressed() {
   if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
-    me.destinationX = round(mouseX);
-    me.destinationY = round(mouseY);
-    console.log(me.destinationX);
-    socket.emit("move", {
-      destinationX: me.destinationX,
-      destinationY: me.destinationY,
-    });
+    if (me.destinationX !== undefined && me.destinationY !== undefined) {
+      me.destinationX = round(mouseX);
+      me.destinationY = round(mouseY);
+      socket.emit("move", {
+        destinationX: me.destinationX,
+        destinationY: me.destinationY,
+      });
+    }
   }
 }
 
@@ -97,21 +106,22 @@ function GameStart() {
   scale(ASSET_SCALE);
   translate(-NATIVE_WIDTH / 2, -NATIVE_HEIGHT / 2);
 
-  if(state.me.room == "bar"){
+  if (state.me.room == "bar") {
     animation(bar_bg, floor(WIDTH / 2), floor(HEIGHT / 2));
-  }else {
+  } else {
     animation(entrance_bg, floor(WIDTH / 2), floor(HEIGHT / 2));
   }
 
   pop();
 
-  if(state.gameStart){
+  if (state.gameStart) {
     //draw other players
     DisplayPlayers();
     //draw me
     DisplayMe();
   }
 
+<<<<<<< HEAD
   
 // for(var playerID in state.players){
 //   var p = state.players[playerID];
@@ -132,6 +142,54 @@ function GameStart() {
 // }
   
   
+=======
+  // //draw other players
+  // DisplayPlayers();
+  // //draw me
+  // DisplayMe();
+  // draw lines connect with bubble
+  for (let i = 0; i < bubbles.length; i++) {
+    let b = bubbles[i];
+    // console.log(me.id);
+    if (b.id == me.id && !b.orphan) {
+      if (round(me.x) == b.x && round(me.y) == b.y) {
+        strokeWeight(2);
+        stroke(30);
+        strokeCap(SQUARE);
+        line(floor(me.x), floor(me.y - BUBBLE_MARGIN), floor(me.x), floor(b.y));
+      } else {
+        b.orphan = true;
+      }
+    }
+    // if (player !== null && !b.orphan) {
+    // if (round(player.x) == b.x && round(player.y) == b.y) {
+    //   strokeWeight(2);
+    //   stroke(30);
+    //   strokeCap(SQUARE);
+    //   line(
+    //     floor(player.x),
+    //     floor(player.y - BUBBLE_MARGIN),
+    //     floor(player.x),
+    //     floor(b.y)
+    //   );
+    // }
+    // } else {
+    //   //once if move break the line;
+    //   b.orphan = true;
+    // }
+  }
+
+  for (var i = 0; i < bubbles.length; i++) {
+    bubbles[i].update();
+  }
+
+  for (var i = 0; i < bubbles.length; i++) {
+    if (bubbles[i].counter < 0) {
+      bubbles.splice(i, 1);
+      i--; //decrement
+    }
+  }
+>>>>>>> main
 }
 
 function WindowResized() {
@@ -200,7 +258,12 @@ function isObstacle(x, y, room, a) {
 const sendMessage = (event) => {
   const messageInput = document.getElementById("message-input");
   state.me.message = messageInput.value;
-  socket.emit("sendMessage", { message: me.message });
+  socket.emit("sendMessage", { message: state.me.message, x: me.x, y: me.y });
+  console.log(me.x);
+  //create text bubble for myself
+  let newBubble = new Bubble(messageInput.value, me.x, me.y, me.id);
+  bubbles.push(newBubble);
+  console.log(bubbles);
 };
 
 function ScaleCanvas() {
@@ -234,7 +297,7 @@ function DisplayMe() {
   me.move();
   me.display();
   me.displayName();
-  me.displayMessage();
+  // me.displayMessage();
 }
 
 //draw other players
@@ -243,7 +306,7 @@ function DisplayPlayers() {
     player.move();
     player.display();
     player.displayName();
-    player.displayOtherMessage();
+    // player.displayOtherMessage();
   });
 }
 
@@ -292,6 +355,7 @@ socket.on("join", (data) => {
       data.destinationY
     )
   );
+  bubbles = state.bubbles;
 });
 
 socket.on("playerMoved", (data) => {
@@ -309,6 +373,9 @@ socket.on("onMessage", (data) => {
   if (index > -1) {
     state.players[index].message = data.message;
   }
+  //create text bubble
+  let newBubble = new Bubble(data.message, data.x, data.y, data.id);
+  bubbles.push(newBubble);
 });
 
 socket.on("quit", (id) => {
