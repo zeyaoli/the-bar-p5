@@ -63,9 +63,10 @@ class Player {
 
   display() {
     // console.log("display: "+this.id);
-    rectMode(CENTER);
-    rect(this.x, this.y, 30, 30);
-    fill(255);
+    // rectMode(CENTER);
+    // rect(this.x, this.y, 30, 30);
+    // fill(255);
+    animation(avatar, this.x, this.y);
   }
 
   displayName() {

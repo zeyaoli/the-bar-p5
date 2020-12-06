@@ -15,6 +15,7 @@ let canvas;
 
 var bg;
 var gameBg;
+var avatar;
 
 var ASSETS_FOLDER = "src/assets/";
 
@@ -29,6 +30,7 @@ var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
 let socket = io.connect();
 
 function preload() {
+  var avatar_ss = loadSpriteSheet(ASSETS_FOLDER + "avatar_ss.png", 17,17,4);
   var ss = loadSpriteSheet(
     ASSETS_FOLDER + state.entrance.bg,
     NATIVE_WIDTH,
@@ -36,6 +38,7 @@ function preload() {
     2
   );
   bg = loadAnimation(ss);
+  avatar = loadAnimation(avatar_ss);
 }
 
 function setup() {
@@ -50,6 +53,7 @@ function setup() {
 
   if (state.entrance.frameDelay != null) {
     bg.frameDelay = state.entrance.frameDelay;
+    avatar.frameDelay = 15;
   }
 }
 
