@@ -17,6 +17,7 @@ var entrance_bg;
 var bar_bg;
 var gameBg;
 var avatar;
+var bar_areas;
 
 var ASSETS_FOLDER = "src/assets/";
 
@@ -47,6 +48,8 @@ function preload() {
   entrance_bg = loadAnimation(entrance_ss);
   bar_bg = loadAnimation(bar_ss);
   avatar = loadAnimation(avatar_ss);
+
+  bar_areas = state.bar.area;
 }
 
 function setup() {
@@ -108,6 +111,26 @@ function GameStart() {
     //draw me
     DisplayMe();
   }
+
+  
+// for(var playerID in state.players){
+//   var p = state.players[playerID];
+
+//   var illegal = isObstacle(p.x, p.y, p.room, areas);
+//   if (illegal) {
+//       //print(">>>>>>>>>>>" + p.id + " is in an illegal position<<<<<<<<<<<<<<<");
+//       p.ignore = true;
+//       if (p.sprite != null)
+//           p.sprite.ignore = true;
+//   }
+//   else {
+//       p.ignore = false;
+//       if (p.sprite != null)
+//           p.sprite.ignore = false;
+//   }
+
+// }
+  
   
 }
 
@@ -144,6 +167,34 @@ const HandleSubmit = (event) => {
   joinForm.style.display = "none";
   messageForm.style.display = "block";
 };
+
+function isObstacle(x, y, room, a) {
+  var obs = true;
+
+  if (room != null && a != null) {
+
+      //you know, at this point I"m not sure if you are using assets scaled by 2 for the areas
+      //so I"m just gonna stretch the coordinates ok
+      var px = floor(map(x, 0, WIDTH, 0, a.width));
+      var py = floor(map(y, 0, HEIGHT, 0, a.height));
+
+      var c1 = a.get(px, py);
+
+      //if not white check if color is obstacle
+      if (c1[0] != 255 || c1[1] != 255 || c1[2] != 255) {
+          // var cmd = getCommand(c1, room);
+
+          // if (cmd != null)
+          //     if (cmd.obstacle != null)
+          //         obs = cmd.obstacle;
+          obs = true;
+      }
+      else
+          obs = false; //if white
+
+  }
+  return obs;
+}
 
 // send message from message form
 const sendMessage = (event) => {
