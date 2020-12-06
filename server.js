@@ -50,7 +50,8 @@ io.on("connection", (socket) => {
     if (index > -1) {
       players[index].destinationX = destinationX;
       players[index].destinationY = destinationY;
-      console.log(socket.id + "moved");
+      // console.log(socket.id + "moved");
+      // console.log("destinationX" + destinationX +", destinationY: "+ destinationY);
     }
     socket.broadcast.emit("playerMoved", {
       id: socket.id,

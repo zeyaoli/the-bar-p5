@@ -1,5 +1,3 @@
-// var state = require('./State.js');
-
 //ref to other players
 let players = state.players;
 // ref to my player
@@ -57,17 +55,16 @@ function preload() {
   bar_bg = loadAnimation(bar_ss);
   avatar = loadAnimation(avatar_ss);
 
-  bar_areas = state.bar.area;
+  bar_areas = loadImage(ASSETS_FOLDER + state.bar.area);
 }
 
 function setup() {
   canvas = createCanvas(WIDTH, HEIGHT);
   canvas.parent("canvas-container");
 
+  canvas.mouseReleased(canvasReleased);
   //adapt it to the browser window
-
   ScaleCanvas();
-
   noSmooth();
 
   if (state.entrance.frameDelay != null) {
@@ -77,27 +74,23 @@ function setup() {
 }
 
 function draw() {
-  // if (state.gameStart) {
   GameStart();
-  // }
 }
 
-function mousePressed() {
-  if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
-    if (me.destinationX !== undefined && me.destinationY !== undefined) {
-      me.destinationX = round(mouseX);
-      me.destinationY = round(mouseY);
-      socket.emit("move", {
-        destinationX: me.destinationX,
-        destinationY: me.destinationY,
-      });
-    }
-  }
-}
+// function mousePressed() {
+//   if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+//     if (me.destinationX !== undefined && me.destinationY !== undefined) {
+//       me.destinationX = round(mouseX);
+//       me.destinationY = round(mouseY);
+//       socket.emit("move", {
+//         destinationX: me.destinationX,
+//         destinationY: me.destinationY,
+//       });
+//     }
+//   }
+// }
 
 function GameStart() {
-  // background(0);
-  // fill(255);
 
   background(0);
   imageMode(CORNER);
@@ -120,33 +113,8 @@ function GameStart() {
     //draw me
     DisplayMe();
   }
-
-<<<<<<< HEAD
-  
-// for(var playerID in state.players){
-//   var p = state.players[playerID];
-
-//   var illegal = isObstacle(p.x, p.y, p.room, areas);
-//   if (illegal) {
-//       //print(">>>>>>>>>>>" + p.id + " is in an illegal position<<<<<<<<<<<<<<<");
-//       p.ignore = true;
-//       if (p.sprite != null)
-//           p.sprite.ignore = true;
-//   }
-//   else {
-//       p.ignore = false;
-//       if (p.sprite != null)
-//           p.sprite.ignore = false;
-//   }
-
-// }
   
   
-=======
-  // //draw other players
-  // DisplayPlayers();
-  // //draw me
-  // DisplayMe();
   // draw lines connect with bubble
   for (let i = 0; i < bubbles.length; i++) {
     let b = bubbles[i];
@@ -161,22 +129,6 @@ function GameStart() {
         b.orphan = true;
       }
     }
-    // if (player !== null && !b.orphan) {
-    // if (round(player.x) == b.x && round(player.y) == b.y) {
-    //   strokeWeight(2);
-    //   stroke(30);
-    //   strokeCap(SQUARE);
-    //   line(
-    //     floor(player.x),
-    //     floor(player.y - BUBBLE_MARGIN),
-    //     floor(player.x),
-    //     floor(b.y)
-    //   );
-    // }
-    // } else {
-    //   //once if move break the line;
-    //   b.orphan = true;
-    // }
   }
 
   for (var i = 0; i < bubbles.length; i++) {
@@ -189,7 +141,6 @@ function GameStart() {
       i--; //decrement
     }
   }
->>>>>>> main
 }
 
 function WindowResized() {
@@ -226,32 +177,39 @@ const HandleSubmit = (event) => {
   messageForm.style.display = "block";
 };
 
-function isObstacle(x, y, room, a) {
-  var obs = true;
 
-  if (room != null && a != null) {
+//when I click to move
+function canvasReleased() {
+  if (mouseButton == LEFT) {
+          
+          if (bar_areas != null) {
+            
+              //you know, at this point I'm not sure if you are using assets scaled by 2 for the areas
+              //so I'm just gonna stretch the coordinates ok
+              var mx = floor(map(mouseX, 0, WIDTH, 0, bar_areas.width));
+              var my = floor(map(mouseY, 0, HEIGHT, 0, bar_areas.height));
 
-      //you know, at this point I"m not sure if you are using assets scaled by 2 for the areas
-      //so I"m just gonna stretch the coordinates ok
-      var px = floor(map(x, 0, WIDTH, 0, a.width));
-      var py = floor(map(y, 0, HEIGHT, 0, a.height));
+              var c = bar_areas.get(mx, my);
 
-      var c1 = a.get(px, py);
-
-      //if not white check if color is obstacle
-      if (c1[0] != 255 || c1[1] != 255 || c1[2] != 255) {
-          // var cmd = getCommand(c1, room);
-
-          // if (cmd != null)
-          //     if (cmd.obstacle != null)
-          //         obs = cmd.obstacle;
-          obs = true;
-      }
-      else
-          obs = false; //if white
-
+              console.log("color: "+c);
+              //if transparent or semitransparent do nothing
+              if (alpha(c) != 255) {
+                  //cancel command
+                  // nextCommand = null;
+                  //stop if moving
+                  if (me.x != me.destinationX && me.y != me.destinationY)
+                      socket.emit("move", { destinationX: me.x, destinationY: me.y });
+              }
+              else if (c[0] == 255 && c[1] == 255 && c[2] == 255) {
+                  //if white, generic walk stop command
+                  // nextCommand = null;
+                  me.destinationX = round(mouseX);
+                  me.destinationY = round(mouseY);
+                  socket.emit("move", { destinationX: me.destinationX, destinationY: me.destinationY });
+              }
+          }
   }
-  return obs;
+
 }
 
 // send message from message form
