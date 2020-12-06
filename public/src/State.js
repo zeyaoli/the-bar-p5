@@ -19,7 +19,9 @@ var state = {
     frames: 2,
     frameDelay: 30,
     avatarScale: 2,
-    tint: "#fdeac8",
+    // tint: "#fdeac8",
+    area: "barEntrance_area.png"
+
   },
   bar: {
     bg: "bar.png",

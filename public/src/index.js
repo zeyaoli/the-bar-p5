@@ -66,6 +66,7 @@ function preload() {
   
   
   bar_areas = loadImage(ASSETS_FOLDER + state.bar.area);
+  // entrance_areas = loadImage(ASSETS_FOLDER + state.entrance.area);
 }
 
 function setup() {
@@ -169,6 +170,7 @@ const HandleSubmit = (event) => {
   m.destinationX = m.x;
   m.destinationY = m.y;
   m.room = "bar";
+  // m.room = "entrance";
   socket.emit("join", {
     id: m.id,
     name: m.name,
@@ -197,7 +199,7 @@ function canvasReleased() {
 
       var c = bar_areas.get(mx, my);
 
-      console.log("color: " + c);
+      // console.log("color: " + c);
       //if transparent or semitransparent do nothing
       if (alpha(c) != 255) {
         //cancel command
@@ -215,6 +217,28 @@ function canvasReleased() {
           destinationY: me.destinationY,
         });
       }
+      // else if(c[0] == 0 && c[1] == 0 && c[2] == 0){
+      //   //if black, enter the bar
+
+      //   socket.emit("move", {
+      //     destinationX: me.destinationX,
+      //     destinationY: me.destinationY,
+      //   });
+
+      //   if(me.x == me.destinationX && me.y == me.destinationY){
+      //     let m = state.me;
+      //     m.room = "bar";
+
+      //     socket.emit("changeRoom", {
+      //       id: m.id,
+      //       // name: m.name,
+      //       x: m.x,
+      //       y: m.y,
+      //       room: m.room
+      //     });
+      //   }
+
+      // }
     }
   }
 }
@@ -344,6 +368,10 @@ socket.on("onMessage", (data) => {
   let newBubble = new Bubble(data.message, data.x, data.y, data.id);
   bubbles.push(newBubble);
 });
+
+// socket.on("changeRoom", (data) => {
+
+// });
 
 socket.on("quit", (id) => {
   const index = state.players.findIndex((e) => e.id === id);

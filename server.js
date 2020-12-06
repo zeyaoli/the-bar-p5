@@ -78,6 +78,23 @@ io.on("connection", (socket) => {
     });
   });
 
+  // socket.on("changeRoom", (data) => {
+  //   const {id, x, y, room} = data;
+  //   const index = players.findIndex((e) => e.id === socket.id);
+  //   if (index > -1) {
+  //     players[index].room = room;
+  //     players[index].x = x;
+  //     players[index].y = y;
+  //   }
+  //   console.log(room);
+  //   socket.broadcast.emit("onMessage", {
+  //     id: socket.id,
+  //     room: room,
+  //     x: x,
+  //     y: y,
+  //   });
+  // });
+
   //client disconnect
   socket.on("disconnect", function () {
     //console.log("Client has disconnected " + socket.id);
