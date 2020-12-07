@@ -16,7 +16,8 @@ var bar_bg;
 var gameBg;
 var avatar;
 var bar_areas;
-var avatars_c = ["pink", "blue", "green", "white", "yellow"];
+var bartender;
+var avatars_c = ["pink", "blue", "green", "orange", "yellow"];
 var avatars_ss = [];
 var avatars = [];
 
@@ -49,6 +50,9 @@ function preload() {
     avatars[i].frameDelay = 15;
   }
 
+  var bartender_ss = loadSpriteSheet(
+    ASSETS_FOLDER + "bartender.png",17,17,4);
+
   var entrance_ss = loadSpriteSheet(
     ASSETS_FOLDER + state.entrance.bg,
     NATIVE_WIDTH,
@@ -63,6 +67,7 @@ function preload() {
   );
   entrance_bg = loadAnimation(entrance_ss);
   bar_bg = loadAnimation(bar_ss);
+  bartender = loadAnimation(bartender_ss);
   
   
   bar_areas = loadImage(ASSETS_FOLDER + state.bar.area);
@@ -80,6 +85,7 @@ function setup() {
 
   if (state.entrance.frameDelay != null) {
     entrance_bg.frameDelay = state.entrance.frameDelay;
+    bartender.frameDelay = 15;
   }
 
   
@@ -121,6 +127,8 @@ function GameStart() {
     DisplayPlayers();
     //draw me
     DisplayMe();
+    //draw bartender
+    DisplayBartender();
   }
 
   // draw lines connect with bubble
@@ -165,8 +173,8 @@ const HandleSubmit = (event) => {
   m.name = userName;
   m.id = socket.id;
   m.avatar = Math.floor(Math.random() * 5);
-  m.x = WIDTH / 2 + Math.floor(Math.random() * 25);
-  m.y = HEIGHT / 2 + Math.floor(Math.random() * 25);
+  m.x = 50 + Math.floor(Math.random() * WIDTH);
+  m.y = HEIGHT / 2 + 50 + Math.floor(Math.random() * 25);
   m.destinationX = m.x;
   m.destinationY = m.y;
   m.room = "bar";
@@ -297,6 +305,11 @@ function DisplayPlayers() {
     player.displayName();
     // player.displayOtherMessage();
   });
+}
+
+//draw bartender
+function DisplayBartender(){
+  animation(bartender, floor(WIDTH / 2), floor(HEIGHT / 2));
 }
 
 //initial other players that already in this map
