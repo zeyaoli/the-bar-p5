@@ -20,8 +20,7 @@ var state = {
     frameDelay: 30,
     avatarScale: 2,
     // tint: "#fdeac8",
-    area: "barEntrance_area.png"
-
+    area: "barEntrance_area.png",
   },
   bar: {
     bg: "bar.png",
@@ -32,6 +31,18 @@ var state = {
     area: "bar_area.png",
   },
   bubbles: [],
+  bartender: {
+    id: "bartender",
+    message: [
+      "Hi there, do you want anything?",
+      "Vodka Soda?",
+      "Too loud, say it again?",
+      "Can I get something for you?",
+      "Do you want gin tonic?",
+      "Welcome to the bar!",
+      "Will grab a drink for you",
+    ],
+  },
 };
 
 // const getData = () => {

@@ -42,16 +42,21 @@ var HEIGHT = NATIVE_HEIGHT * ASSET_SCALE;
 let socket = io.connect();
 
 function preload() {
-
   //preload avatar sprite
-  for(var i = 0; i< avatars_c.length; i++){
-    avatars_ss.push(loadSpriteSheet(ASSETS_FOLDER + `avatar_${avatars_c[i]}.png`, 17, 17, 4));
+  for (var i = 0; i < avatars_c.length; i++) {
+    avatars_ss.push(
+      loadSpriteSheet(ASSETS_FOLDER + `avatar_${avatars_c[i]}.png`, 17, 17, 4)
+    );
     avatars.push(loadAnimation(avatars_ss[i]));
     avatars[i].frameDelay = 15;
   }
 
   var bartender_ss = loadSpriteSheet(
-    ASSETS_FOLDER + "bartender.png",17,17,4);
+    ASSETS_FOLDER + "bartender.png",
+    17,
+    17,
+    4
+  );
 
   var entrance_ss = loadSpriteSheet(
     ASSETS_FOLDER + state.entrance.bg,
@@ -68,8 +73,7 @@ function preload() {
   entrance_bg = loadAnimation(entrance_ss);
   bar_bg = loadAnimation(bar_ss);
   bartender = loadAnimation(bartender_ss);
-  
-  
+
   bar_areas = loadImage(ASSETS_FOLDER + state.bar.area);
   // entrance_areas = loadImage(ASSETS_FOLDER + state.entrance.area);
 }
@@ -87,24 +91,11 @@ function setup() {
     entrance_bg.frameDelay = state.entrance.frameDelay;
     bartender.frameDelay = 15;
   }
-
-  
 }
 
 function draw() {
   GameStart();
 }
-// old code - click everywhere to move
-// function mousePressed() {
-//   if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
-//     me.destinationX = round(mouseX);
-//     me.destinationY = round(mouseY);
-//     socket.emit("move", {
-//       destinationX: me.destinationX,
-//       destinationY: me.destinationY,
-//     });
-//   }
-// }
 
 function GameStart() {
   background(0);
@@ -189,7 +180,15 @@ const HandleSubmit = (event) => {
     destinationX: m.destinationX,
     destinationY: m.destinationY,
   });
-  me = new Player(m.id, m.name, m.avatar, m.x, m.y, m.destinationX, m.destinationY);
+  me = new Player(
+    m.id,
+    m.name,
+    m.avatar,
+    m.x,
+    m.y,
+    m.destinationX,
+    m.destinationY
+  );
   state.gameStart = true;
   // hide join and show message
   joinForm.style.display = "none";
@@ -257,8 +256,9 @@ const sendMessage = (event) => {
   state.me.message = messageInput.value;
   socket.emit("sendMessage", { message: state.me.message, x: me.x, y: me.y });
   console.log(me.x);
+  let offY = 100;
   //create text bubble for myself
-  let newBubble = new Bubble(messageInput.value, me.x, me.y, me.id);
+  let newBubble = new Bubble(messageInput.value, me.x, me.y, me.id, 100);
   bubbles.push(newBubble);
   console.log(bubbles);
 };
@@ -308,8 +308,27 @@ function DisplayPlayers() {
 }
 
 //draw bartender
-function DisplayBartender(){
+function DisplayBartender() {
   animation(bartender, floor(WIDTH / 2), floor(HEIGHT / 2));
+  // setInterval(DisplayBartenderMessage(), 5000);
+  if (frameCount % 500 == 0) {
+    DisplayBartenderMessage();
+  }
+}
+
+function DisplayBartenderMessage() {
+  let ranLength = floor(random(state.bartender.message.length));
+  let randomMessage = state.bartender.message[ranLength];
+  console.log(randomMessage);
+  let offY = 50;
+  let newBubble = new Bubble(
+    randomMessage,
+    floor(WIDTH / 2),
+    floor(HEIGHT / 2),
+    state.bartender.id,
+    offY
+  );
+  bubbles.push(newBubble);
 }
 
 //initial other players that already in this map
@@ -377,8 +396,9 @@ socket.on("onMessage", (data) => {
   if (index > -1) {
     state.players[index].message = data.message;
   }
+  let offY = 100;
   //create text bubble
-  let newBubble = new Bubble(data.message, data.x, data.y, data.id);
+  let newBubble = new Bubble(data.message, data.x, data.y, data.id, offY);
   bubbles.push(newBubble);
 });
 
