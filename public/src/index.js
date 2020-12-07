@@ -20,6 +20,7 @@ var bartender;
 var avatars_c = ["pink", "blue", "green", "orange", "yellow"];
 var avatars_ss = [];
 var avatars = [];
+let audio = new Audio("./src/assets/Style - AShamaluevMusic.mp3");
 
 let BUBBLE_TIME = 8;
 let BUBBLE_MARGIN = 3;
@@ -87,6 +88,8 @@ function setup() {
     entrance_bg.frameDelay = state.entrance.frameDelay;
     bartender.frameDelay = 15;
   }
+
+ 
 
   
 }
@@ -194,6 +197,9 @@ const HandleSubmit = (event) => {
   // hide join and show message
   joinForm.style.display = "none";
   messageForm.style.display = "block";
+
+  audio.play();
+  audio.loop = true;
 };
 
 //when I click to move
