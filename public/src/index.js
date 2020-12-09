@@ -195,6 +195,7 @@ const HandleSubmit = (event) => {
   joinForm.style.display = "none";
   messageForm.style.display = "block";
 
+  audio.volume = 0.1;
   audio.play();
   audio.loop = true;
 };
